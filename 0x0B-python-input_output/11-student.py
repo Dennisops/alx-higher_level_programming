@@ -1,41 +1,50 @@
 #!/usr/bin/python3
-
-""" Class Student defining a student """
+"""Module 13-student.
+Creates a Student class.
+"""
 
 
 class Student:
-    """ Defines a student """
+    """Class that defines a student.
+    Public attributes:
+        - first_name
+        - last_name
+        - age
+    Public method to_json().
+    Public method reload_from_json().
+    """
 
     def __init__(self, first_name, last_name, age):
-        """
-        Args:
-            first_name (str): Student's first name.
-            last_name (str): Student's last name.
-            age (int): Student's age.
-        """
+        """Initializes the Student instance."""
+
         self.first_name = first_name
         self.last_name = last_name
         self.age = age
 
     def to_json(self, attrs=None):
-        """
-        Args:
-            attrs (list): The attributes to represent.
+        """Retrieves a dictionary representation
+        of a Student instance.
 
-        Returns:
-            Dictionary representation of student
+        Args:
+            - attrs: list of attributes
+
+        Returns: the dict representation of the instance.
         """
-        if (type(attrs) == list and
-                all(type(stuff) == str for stuff in attrs)):
-            return {k: getattr(self, k) for k in attrs if hasattr(self, k)}
-        return self.__dict_
+
+        my_dict = dict()
+        if attrs and all(isinstance(x, str) for x in attrs):
+            for x in attrs:
+                if x in self.__dict__:
+                    my_dict.update({x: self.__dict__[x]})
+            return my_dict
+        return self.__dict__
 
     def reload_from_json(self, json):
-        """
-        Replace all attributes of Student.
+        """Replaces all attributes of the Student instance.
 
         Args:
-            json (dict): Dict to replace attributes with.
+            - json: dictionnary of attributes
         """
-        for k, v in json.items():
-            setattr(self, k, v)_
+
+        for x in json:
+            self.__dict__.update({x: json[x]})
